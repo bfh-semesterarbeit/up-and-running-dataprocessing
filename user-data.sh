@@ -1,4 +1,7 @@
 #!/bin/bash
+# vars
+MY_USER=ubuntu
+HOME_DIR="/home/${MY_USER}"
 apt-get update
 
 # get git
@@ -10,5 +13,20 @@ apt-add-repository --yes --update ppa:ansible/ansible
 apt install -y ansible
 
 # get project
-git clone https://github.com/bfh-semesterarbeit/up-and-running-dataprocessing.git /home/ubuntu/up-and-running-dataprocessing
+git clone https://github.com/bfh-semesterarbeit/up-and-running-dataprocessing.git "${HOME_DIR}/up-and-running-dataprocessing"
+chown -R ubuntu.ubuntu "${HOME_DIR}/up-and-running-dataprocessing/"
 
+# TODO in ansible playbook
+# mount efs
+apt install -y nfs-common
+
+mkdir "${HOME_DIR}/data"
+chmod go+rw "${HOME_DIR}/data"
+
+mount -t nfs \
+-o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-5ace1d90.efs.eu-west-1.amazonaws.com:/ \
+"${HOME_DIR}/data"
+
+# install docker
+apt -y install docker.io
+sudo usermod -aG docker "${MY_USER}"
