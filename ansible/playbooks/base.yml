@@ -6,13 +6,13 @@
 
     - name: Kleiner gleich 5
       debug:
-        msg: "kleiner als"
-      when: 5 <= processing_step|int
+        msg: "kleiner gleich"
+      when: processing_step|int <= 5
 
     - name: Grösser als 5
       debug:
-        msg: "kleiner als"
-      when: 5 > processing_step|int
+        msg: "grösser als"
+      when: processing_step|int > 5
 
     - name: handling
       command: echo "har"
