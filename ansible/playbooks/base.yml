@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  tasks:
+    - name: echo '{{processing_step}}'
+      command: echo "{{processing_step}}"
+
+    - name: Kleiner gleich 5
+      debug:
+        msg: "kleiner als"
+      when: 5 <= processing_step|int
+
+    - name: Grösser als 5
+      debug:
+        msg: "kleiner als"
+      when: 5 > processing_step|int
+
+    - name: handling
+      command: echo "har"
+
+    - name: taa
+      include_tasks: setup.yml
+
+

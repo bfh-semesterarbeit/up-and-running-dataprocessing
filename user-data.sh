@@ -10,6 +10,7 @@ apt install -y git-all
 # install ansible
 apt install -y software-properties-common
 apt-add-repository --yes --update ppa:ansible/ansible
+apt-get update
 apt install -y ansible
 
 # get project
