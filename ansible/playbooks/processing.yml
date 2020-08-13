@@ -94,6 +94,8 @@
   docker_container:
     name: analyticalgraphicsinc-swayze 
     image: 483277333869.dkr.ecr.eu-west-1.amazonaws.com/semesterarbeit:analyticalgraphicsinc-swayze
+#    memory: 3G TODO: dynamic
+#    cpu_quota: TODO: dynamic 
     volumes:
       - /home/{{ my_user }}/data/input/:/var/app/input/
       - /home/{{ my_user }}/data/output/:/var/app/output/
