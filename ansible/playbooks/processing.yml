@@ -14,7 +14,7 @@
     msg: "Step 1"
   when: lookup('file', processing_step_file)|int <= 1
 
-- name: create dest folder
+- name: create input folder
   file: 
     path: /home/{{ ansible_ssh_user }}/data/input
     state: directory
@@ -27,7 +27,6 @@
   #      do echo extracting ${i};tar -xzvf ${i} -C /home/ubuntu/data/input/;
   #    done
   #  when: lookup('file', processing_step_file)|int <= 1
-
 
 - name: first step accomplished
   vars:
@@ -43,5 +42,18 @@
 - name: Second step
   debug:
     msg: "Step 2"
+  when: lookup('file', processing_step_file)|int == 2
+
+- name: create output folder
+  file: 
+    path: /home/{{ ansible_ssh_user }}/data/output
+    state: directory
+    mode: '0700'
+  when: lookup('file', processing_step_file)|int <= 1
+
+- name: get docker image from aws ecr
+  shell: |
+    docker login -u AWS -p $(aws ecr get-login-password) https://483277333869.dkr.ecr.eu-west-1.amazonaws.com
+    docker pull 483277333869.dkr.ecr.eu-west-1.amazonaws.com/semesterarbeit:analyticalgraphicsinc-swayze
   when: lookup('file', processing_step_file)|int == 2
 
