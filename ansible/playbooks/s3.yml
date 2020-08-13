@@ -31,15 +31,15 @@
 
 - name: symbolic link 
   file:
-    src: /home/{{ ansible_ssh_user }}/data/admin/test.txt
+    src: /home/{{ my_user }}/data/admin/test.txt
     dest: /home/{{ ansible_ssh_user }}/.aws/credentials
-    owner: '{{ my_user }}'
+    owner: '{{ ansible_ssh_user }}'
     state: link
     mode: '440'
 
 - name: symbolic links config
   file:
-    src: /home/{{ ansible_ssh_user }}/data/admin/test2.txt
+    src: /home/{{ my_user }}/data/admin/test2.txt
     dest: /home/{{ ansible_ssh_user }}/.aws/config
     owner: '{{ ansible_ssh_user }}'
     state: link
