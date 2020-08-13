@@ -2,6 +2,7 @@
 - name: create dir
   file: 
     path: /home/{{ my_user }}/.aws
+    owner: '{{ my_user }}'
     state: directory
     mode: '0700'
 
