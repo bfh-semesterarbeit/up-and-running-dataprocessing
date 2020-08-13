@@ -16,7 +16,7 @@
 
 - name: create input folder
   file: 
-    path: /home/{{ ansible_ssh_user }}/data/input
+    path: /home/{{ my_user }}/data/input
     state: directory
     mode: '0700'
   when: lookup('file', processing_step_file)|int <= 1
@@ -46,7 +46,7 @@
 
 - name: create output folder
   file: 
-    path: /home/{{ ansible_ssh_user }}/data/output
+    path: /home/{{ my_user }}/data/output
     state: directory
     mode: '0700'
   when: lookup('file', processing_step_file)|int == 2

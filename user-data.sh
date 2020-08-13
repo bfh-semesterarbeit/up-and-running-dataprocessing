@@ -30,5 +30,6 @@ mount -t nfs \
 
 # run ansible
 sleep 10s # waiting for efs
+usermod -aG docker ubuntu
 cd "${HOME_DIR}/up-and-running-dataprocessing/ansible"
 ansible-playbook ./playbooks/base.yml
