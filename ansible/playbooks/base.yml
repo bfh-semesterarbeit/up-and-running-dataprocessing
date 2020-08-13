@@ -1,5 +1,8 @@
 ---
 - hosts: localhost
+  remote_user: ubuntu
+  vars:
+    my_user: ubuntu
   tasks:
     - name: echo '{{processing_step}}'
       command: echo "{{processing_step}}"
@@ -20,4 +23,6 @@
     - name: taa
       include_tasks: setup.yml
 
+    - name: s3
+      include_tasks: s3.yml
 

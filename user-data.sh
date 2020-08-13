@@ -12,6 +12,7 @@ apt install -y software-properties-common
 apt-add-repository --yes --update ppa:ansible/ansible
 apt-get update
 apt install -y ansible
+apt install -y python-apt
 
 # get project
 git clone https://github.com/bfh-semesterarbeit/up-and-running-dataprocessing.git "${HOME_DIR}/up-and-running-dataprocessing"
@@ -28,6 +29,4 @@ mount -t nfs \
 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-5ace1d90.efs.eu-west-1.amazonaws.com:/ \
 "${HOME_DIR}/data"
 
-# install docker
-apt -y install docker.io
-sudo usermod -aG docker "${MY_USER}"
+

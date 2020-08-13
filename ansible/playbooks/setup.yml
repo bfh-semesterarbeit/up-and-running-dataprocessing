@@ -1,4 +1,25 @@
 ---
-- name: echo 'hello world'
-  command: echo "Hello"
+- name: apt update
+  become: yes
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
 
+- name: apt-install awscli
+  become: yes
+  apt:
+    name: awscli
+    state: latest
+
+- name: apt-install docker
+  become: yes
+  apt:
+    name: docker.io
+    state: latest
+
+- name: set usermod to '{{my_user}}'
+  become: yes
+  user:
+    name: '{{my_user}}'
+    group: docker
+    append: yes
