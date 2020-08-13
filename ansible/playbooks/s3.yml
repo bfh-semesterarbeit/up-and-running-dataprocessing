@@ -24,7 +24,7 @@
 
 - name: create dir
   file: 
-    path: /home/{{ ansible_ssh_user }}/.aws
+    path: /root/.aws
     owner: '{{ ansible_ssh_user }}'
     state: directory
     mode: '0700'
@@ -32,7 +32,7 @@
 - name: symbolic link 
   file:
     src: /home/{{ my_user }}/data/admin/test.txt
-    dest: /home/{{ ansible_ssh_user }}/.aws/credentials
+    dest: /root/.aws/credentials
     owner: '{{ ansible_ssh_user }}'
     state: link
     mode: '440'
@@ -40,7 +40,7 @@
 - name: symbolic links config
   file:
     src: /home/{{ my_user }}/data/admin/test2.txt
-    dest: /home/{{ ansible_ssh_user }}/.aws/config
+    dest: /root/.aws/config
     owner: '{{ ansible_ssh_user }}'
     state: link
     mode: '440'
