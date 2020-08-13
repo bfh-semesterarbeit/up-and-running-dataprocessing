@@ -5,12 +5,12 @@
     my_user: ubuntu
     processing_step_file: /home/ubuntu/data/processing_step.txt
   tasks:
-#    - name: basic setup
-#      include_tasks: setup.yml
-#
-#    - name: setup to access s3
-#      include_tasks: s3.yml
-#
+    - name: basic setup
+      include_tasks: setup.yml
+
+    - name: setup to access s3
+      include_tasks: s3.yml
+
     - name: processing
       include_tasks: processing.yml
 
