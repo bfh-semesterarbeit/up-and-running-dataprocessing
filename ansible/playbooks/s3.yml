@@ -9,7 +9,7 @@
   file:
     src: /home/{{ my_user }}/data/admin/test.txt
     dest: /home/{{ my_user }}/.aws/credentials
-    owner: '{{ ansible_ssh_user }}'
+    owner: '{{ my_user }}'
     state: link
     mode: '400'
 
@@ -17,6 +17,6 @@
   file:
     src: /home/{{ my_user }}/data/admin/test2.txt
     dest: /home/{{ my_user }}/.aws/config
-    owner: '{{ ansible_ssh_user }}'
+    owner: '{{ my_user }}'
     state: link
     mode: '400'
