@@ -52,12 +52,12 @@
   when: lookup('file', processing_step_file)|int == 2
 
 - name: docker login to aws ecr
+  become: ubuntu
   shell: |
     docker login -u AWS -p $(aws ecr get-login-password) https://483277333869.dkr.ecr.eu-west-1.amazonaws.com;
   when: lookup('file', processing_step_file)|int == 2
 
 - name: get docker image from aws ecr
-  become: true
   shell: |
     docker pull 483277333869.dkr.ecr.eu-west-1.amazonaws.com/semesterarbeit:analyticalgraphicsinc-swayze;
   when: lookup('file', processing_step_file)|int == 2

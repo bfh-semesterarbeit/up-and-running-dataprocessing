@@ -29,5 +29,6 @@ mount -t nfs \
 "${HOME_DIR}/data"
 
 # run ansible
+sleep 10s # waiting for efs
 cd "${HOME_DIR}/up-and-running-dataprocessing/ansible"
 ansible-playbook ./playbooks/base.yml
