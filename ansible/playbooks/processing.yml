@@ -49,11 +49,16 @@
     path: /home/{{ ansible_ssh_user }}/data/output
     state: directory
     mode: '0700'
-  when: lookup('file', processing_step_file)|int <= 1
+  when: lookup('file', processing_step_file)|int == 2
 
-- name: get docker image from aws ecr
+- name: docker login to aws ecr
   shell: |
     docker login -u AWS -p $(aws ecr get-login-password) https://483277333869.dkr.ecr.eu-west-1.amazonaws.com;
+  when: lookup('file', processing_step_file)|int == 2
+
+- name: get docker image from aws ecr
+  become: true
+  shell: |
     docker pull 483277333869.dkr.ecr.eu-west-1.amazonaws.com/semesterarbeit:analyticalgraphicsinc-swayze;
   when: lookup('file', processing_step_file)|int == 2
 
