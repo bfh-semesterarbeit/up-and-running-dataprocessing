@@ -18,7 +18,6 @@ apt install -y python-apt
 git clone https://github.com/bfh-semesterarbeit/up-and-running-dataprocessing.git "${HOME_DIR}/up-and-running-dataprocessing"
 chown -R ubuntu.ubuntu "${HOME_DIR}/up-and-running-dataprocessing/"
 
-# TODO in ansible playbook
 # mount efs
 apt install -y nfs-common
 
@@ -29,4 +28,6 @@ mount -t nfs \
 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-5ace1d90.efs.eu-west-1.amazonaws.com:/ \
 "${HOME_DIR}/data"
 
-
+# TODO: run ansible
+# cd "${HOME_DIR}/up-and-running-dataprocessing/ansible"
+#ansible-playbook ./playbooks/base.yml --extra-vars "processing_step=$(cat ${HOME_DIR}/data/processing_step.txt)"

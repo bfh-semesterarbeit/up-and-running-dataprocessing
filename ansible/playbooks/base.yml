@@ -3,26 +3,14 @@
   remote_user: ubuntu
   vars:
     my_user: ubuntu
+    processing_step_file: /home/ubuntu/data/processing_step.txt
   tasks:
-    - name: echo '{{processing_step}}'
-      command: echo "{{processing_step}}"
-
-    - name: Kleiner gleich 5
-      debug:
-        msg: "kleiner gleich"
-      when: processing_step|int <= 5
-
-    - name: Grösser als 5
-      debug:
-        msg: "grösser als"
-      when: processing_step|int > 5
-
-    - name: handling
-      command: echo "har"
-
-    - name: taa
-      include_tasks: setup.yml
-
-    - name: s3
-      include_tasks: s3.yml
+#    - name: basic setup
+#      include_tasks: setup.yml
+#
+#    - name: setup to access s3
+#      include_tasks: s3.yml
+#
+    - name: processing
+      include_tasks: processing.yml
 
