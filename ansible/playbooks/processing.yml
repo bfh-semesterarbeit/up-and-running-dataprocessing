@@ -58,9 +58,64 @@
     mode: '0700'
   when: lookup('file', processing_step_file)|int == 2
 
-- name: get docker image from aws ecr
-  shell: |
-    docker login -u AWS -p $(aws ecr get-login-password) https://483277333869.dkr.ecr.eu-west-1.amazonaws.com;
-    docker pull 483277333869.dkr.ecr.eu-west-1.amazonaws.com/semesterarbeit:analyticalgraphicsinc-swayze;
+- name: create agi_log folder
+  file: 
+    path: /home/{{ my_user }}/data/agi_log
+    state: directory
+    mode: '0700'
   when: lookup('file', processing_step_file)|int == 2
+
+# obsolete as there are ansible modules
+#- name: get docker image from aws ecr
+#  shell: |
+#    docker login -u AWS -p $(aws ecr get-login-password) https://483277333869.dkr.ecr.eu-west-1.amazonaws.com;
+#    docker pull 483277333869.dkr.ecr.eu-west-1.amazonaws.com/semesterarbeit:analyticalgraphicsinc-swayze;
+#  when: lookup('file', processing_step_file)|int == 2
+
+
+- name: get ecr pw
+  shell: |
+    aws ecr get-login-password
+  register: my_pw
+  when: lookup('file', processing_step_file)|int == 2
+
+#- debug:
+#    var: my_pw.stdout
+
+- name: Log into private registry and force re-authorization
+  docker_login:
+    registry: https://483277333869.dkr.ecr.eu-west-1.amazonaws.com
+    username: AWS
+    password: "{{ my_pw.stdout }}"
+    reauthorize: yes
+  when: lookup('file', processing_step_file)|int == 2
+
+- name: process to web format
+  docker_container:
+    name: analyticalgraphicsinc-swayze 
+    image: 483277333869.dkr.ecr.eu-west-1.amazonaws.com/semesterarbeit:analyticalgraphicsinc-swayze
+    volumes:
+      - /home/{{ my_user }}/data/input/:/var/app/input/
+      - /home/{{ my_user }}/data/output/:/var/app/output/
+      - /home/{{ my_user }}/data/db:/var/app/db/      
+      - /home/{{ my_user }}/data/agi_log:/var/app/log/
+    command: ["/root/.nvm/versions/node/v8.11.2/bin/node", "--max-old-space-size=20000", "/var/app/node_modules/.bin/roadhouse", "-i", "/var/app/input", "-o", "/var/app/output", "-db", "/var/app/db", "--clear-normals", "--face-normals", "--max-tiles", "1000", "-r", "UUID", "-r", "DATUM_AENDERUNG","-r","DATUM_ERSTELLUNG", "-r", "ERSTELLUNG_JAHR","-r", "ERSTELLUNG_MONAT","-r", "REVISION_JAHR","-r", "REVISION_MONAT","-r", "GRUND_AENDERUNG", "-r", "HERKUNFT","-r", "HERKUNFT_JAHR","-r", "HERKUNFT_MONAT","-r", "OBJEKTART","-r", "ORIGINAL_HERKUNFT","-r", "GEBAEUDE_NUTZUNG", "-r", "Longitude", "-r", "Latitude", "-r", "Height"]
+    detach: false
+  when: lookup('file', processing_step_file)|int == 2
+
+- name: second step accomplished
+  vars:
+    processing_step: 3
+  template:
+    src: ../templates/processing_step.txt.tpl
+    dest: '{{ processing_step_file }}'
+    mode: '0660'
+    force: yes
+  when: lookup('file', processing_step_file)|int == 2
+
+# Third step =================================
+- name: Third step
+  debug:
+    msg: "Step 3"
+  when: lookup('file', processing_step_file)|int == 3
 

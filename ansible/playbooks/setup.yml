@@ -14,12 +14,18 @@
 - name: apt-install docker
   become: yes
   apt:
-    name: docker.io
+    pkg:
+    - docker.io
+    - python-pip
     state: latest
+ 
+- name: install docker module for python
+  pip:
+    name: docker
 
-- name: set usermod to '{{my_user}}'
+- name: set usermod to {{ my_user }}
   become: yes
   user:
-    name: '{{my_user}}'
+    name: '{{ my_user }}'
     group: docker
     append: yes
