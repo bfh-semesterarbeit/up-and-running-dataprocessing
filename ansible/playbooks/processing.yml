@@ -99,7 +99,7 @@
       - /home/{{ my_user }}/data/output/:/var/app/output/
       - /home/{{ my_user }}/data/db:/var/app/db/      
       - /home/{{ my_user }}/data/agi_log:/var/app/log/
-    command: ["/root/.nvm/versions/node/v8.11.2/bin/node", "--max-old-space-size=20000", "/var/app/node_modules/.bin/roadhouse", "-i", "/var/app/input", "-o", "/var/app/output", "-db", "/var/app/db", "--clear-normals", "--face-normals", "--max-tiles", "1000", "-r", "UUID", "-r", "DATUM_AENDERUNG","-r","DATUM_ERSTELLUNG", "-r", "ERSTELLUNG_JAHR","-r", "ERSTELLUNG_MONAT","-r", "REVISION_JAHR","-r", "REVISION_MONAT","-r", "GRUND_AENDERUNG", "-r", "HERKUNFT","-r", "HERKUNFT_JAHR","-r", "HERKUNFT_MONAT","-r", "OBJEKTART","-r", "ORIGINAL_HERKUNFT","-r", "GEBAEUDE_NUTZUNG", "-r", "Longitude", "-r", "Latitude", "-r", "Height"]
+    command: ["/root/.nvm/versions/node/v8.11.2/bin/node", "--max-old-space-size=20000", "/var/app/node_modules/.bin/roadhouse", "-i", "/var/app/input", "-o", "/var/app/output", "--db", "/var/app/db", "--clear-normals", "--face-normals", "--max-tiles", "1000", "-r", "UUID", "-r", "DATUM_AENDERUNG","-r","DATUM_ERSTELLUNG", "-r", "ERSTELLUNG_JAHR","-r", "ERSTELLUNG_MONAT","-r", "REVISION_JAHR","-r", "REVISION_MONAT","-r", "GRUND_AENDERUNG", "-r", "HERKUNFT","-r", "HERKUNFT_JAHR","-r", "HERKUNFT_MONAT","-r", "OBJEKTART","-r", "ORIGINAL_HERKUNFT","-r", "GEBAEUDE_NUTZUNG", "-r", "Longitude", "-r", "Latitude", "-r", "Height", "2>&1", ">", "/var/app/log/agi_output.log"]
     detach: false
   when: lookup('file', processing_step_file)|int == 2
 
