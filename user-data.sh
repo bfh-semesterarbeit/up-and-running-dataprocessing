@@ -31,7 +31,7 @@ mount -t nfs \
 # run ansible
 sleep 10s # waiting for efs
 cd "${HOME_DIR}/up-and-running-dataprocessing/ansible"
-mkdir -p "${HOME_DIR}/log"
-chmod 0770 "${HOME_DIR}/log"
+mkdir -p "${HOME_DIR}/data/log"
+chmod 0770 "${HOME_DIR}/data/log"
  
 ansible-playbook ./playbooks/base.yml

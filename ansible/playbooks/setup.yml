@@ -22,7 +22,9 @@
 - name: install docker module for python
   become: yes
   pip:
-    name: docker
+    name:
+    - docker
+    - lxml
 
 - name: set usermod to {{ my_user }}
   become: yes

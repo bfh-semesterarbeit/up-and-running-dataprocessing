@@ -23,12 +23,26 @@
     mode: '0700'
   when: lookup('file', processing_step_file)|int <= 1
 
-  #- name: unzip files
-  #  shell: |
-  #    for i in /home/ubuntu/data/subset_buildings/*.tar;
-  #      do echo extracting ${i};tar -xzvf ${i} -C /home/ubuntu/data/input/;
-  #    done
-  #  when: lookup('file', processing_step_file)|int <= 1
+#- name: unzip files
+#  shell: |
+#    for i in /home/ubuntu/data/subset_buildings/*.tar;
+#      do echo extracting ${i};tar -xzvf ${i} -C /home/ubuntu/data/input/;
+#    done
+#  when: lookup('file', processing_step_file)|int <= 1
+#
+- name: test if xml are wellformed
+  command:
+    cmd: python ../tests/test_xml_wellformed.py
+  register: not_wellformed
+  when: lookup('file', processing_step_file)|int <= 1
+
+- debug:
+    var: not_wellformed
+
+- name: end play when xml not valid
+  fail: 
+    msg: there is a xml, that is not wellformed
+  when: not_wellformed.stderr != "" and lookup('file', processing_step_file)|int <= 1
 
 - name: first step accomplished
   vars:
@@ -109,8 +123,13 @@
       - /home/{{ my_user }}/data/output/:/var/app/output/
       - /home/{{ my_user }}/data/db/:/var/app/db/      
       - /home/{{ my_user }}/data/log/:/var/app/log/
-    command: ["/root/.nvm/versions/node/v8.11.2/bin/node", "--max-old-space-size=20000", "/var/app/node_modules/.bin/roadhouse", "-i", "/var/app/input", "-o", "/var/app/output", "--db", "/var/app/db/database", "--clear-normals", "--face-normals", "--max-tiles", "1000", "-r", "UUID", "-r", "DATUM_AENDERUNG","-r","DATUM_ERSTELLUNG", "-r", "ERSTELLUNG_JAHR","-r", "ERSTELLUNG_MONAT","-r", "REVISION_JAHR","-r", "REVISION_MONAT","-r", "GRUND_AENDERUNG", "-r", "HERKUNFT","-r", "HERKUNFT_JAHR","-r", "HERKUNFT_MONAT","-r", "OBJEKTART","-r", "ORIGINAL_HERKUNFT","-r", "GEBAEUDE_NUTZUNG", "-r", "Longitude", "-r", "Latitude", "-r", "Height", "2>&1", ">", "/var/app/log/agi_output.log"]
+    command: ["/root/.nvm/versions/node/v8.11.2/bin/node", "--max-old-space-size=20000", "/var/app/node_modules/.bin/roadhouse", "-i", "/var/app/input", "-o", "/var/app/output", "--db", "/var/app/db/database", "--clear-normals", "--face-normals", "--max-tiles", "1000", "-r", "UUID", "-r", "DATUM_AENDERUNG","-r","DATUM_ERSTELLUNG", "-r", "ERSTELLUNG_JAHR","-r", "ERSTELLUNG_MONAT","-r", "REVISION_JAHR","-r", "REVISION_MONAT","-r", "GRUND_AENDERUNG", "-r", "HERKUNFT","-r", "HERKUNFT_JAHR","-r", "HERKUNFT_MONAT","-r", "OBJEKTART","-r", "ORIGINAL_HERKUNFT","-r", "GEBAEUDE_NUTZUNG", "-r", "Longitude", "-r", "Latitude", "-r", "Height"]
     detach: false
+  register: docker_output
+  when: lookup('file', processing_step_file)|int == 2
+
+- name: log dockeroutput
+  shell: echo {{ docker_output }} > /home/{{ my_user }}/data/log/agi_log.log
   when: lookup('file', processing_step_file)|int == 2
 
 - name: second step accomplished
