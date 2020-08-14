@@ -30,11 +30,19 @@
 #    done
 #  when: lookup('file', processing_step_file)|int <= 1
 #
+
 - name: test if xml are wellformed
   command:
     cmd: python ../tests/test_xml_wellformed.py
   register: not_wellformed
   when: lookup('file', processing_step_file)|int <= 1
+
+# TODO better solution here: handling not_wellformed.stderr that it exist in any case
+- name: dummy
+  command:
+    cmd: echo ""
+  register: not_wellformed
+  when: not_wellformed.skipped == true 
 
 - debug:
     var: not_wellformed
@@ -150,3 +158,9 @@
   debug:
     msg: "Step 3"
   when: lookup('file', processing_step_file)|int == 3
+
+- name: copy to s3
+  command:
+    cmd: aws s3 cp --recursive /home/{{ my_user }}/data/output s3://3d-tiles/preview/ch.swisstopo.swisstlm3d.3d/current/
+  when: lookup('file', processing_step_file)|int == 3
+
