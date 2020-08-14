@@ -30,9 +30,8 @@ mount -t nfs \
 
 # run ansible
 sleep 10s # waiting for efs
-usermod -aG docker ubuntu
 cd "${HOME_DIR}/up-and-running-dataprocessing/ansible"
-mkdir -p "{HOME_DIR}/log"
-chmod 0770 "{HOME_DIR}/log"
+mkdir -p "${HOME_DIR}/log"
+chmod 0770 "${HOME_DIR}/log"
  
 ansible-playbook ./playbooks/base.yml
