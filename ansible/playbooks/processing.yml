@@ -8,7 +8,9 @@
     mode: '0660'
     force: no
 
-# First step =================================
+# =============================================
+# First step
+# =============================================
 - name: first step
   debug:
     msg: "Step 1"
@@ -37,8 +39,11 @@
     mode: '0660'
     force: yes
   when: lookup('file', processing_step_file)|int <= 1
+# =============================================
 
-# Second step =================================
+# =============================================
+# Second step 
+# =============================================
 - name: Second step
   debug:
     msg: "Step 2"
@@ -49,6 +54,7 @@
     path: /home/{{ my_user }}/data/output
     state: directory
     mode: '0700'
+    force: no
   when: lookup('file', processing_step_file)|int == 2
 
 - name: create db folder
@@ -56,13 +62,15 @@
     path: /home/{{ my_user }}/data/db
     state: directory
     mode: '0700'
+    force: no
   when: lookup('file', processing_step_file)|int == 2
 
 - name: create agi_log folder
   file: 
-    path: /home/{{ my_user }}/data/agi_log
+    path: /home/{{ my_user }}/data/log
     state: directory
     mode: '0700'
+    force: no
   when: lookup('file', processing_step_file)|int == 2
 
 # obsolete as there are ansible modules
@@ -100,7 +108,7 @@
       - /home/{{ my_user }}/data/input/:/var/app/input/
       - /home/{{ my_user }}/data/output/:/var/app/output/
       - /home/{{ my_user }}/data/db/:/var/app/db/      
-      - /home/{{ my_user }}/data/agi_log/:/var/app/log/
+      - /home/{{ my_user }}/data/log/:/var/app/log/
     command: ["/root/.nvm/versions/node/v8.11.2/bin/node", "--max-old-space-size=20000", "/var/app/node_modules/.bin/roadhouse", "-i", "/var/app/input", "-o", "/var/app/output", "--db", "/var/app/db/database", "--clear-normals", "--face-normals", "--max-tiles", "1000", "-r", "UUID", "-r", "DATUM_AENDERUNG","-r","DATUM_ERSTELLUNG", "-r", "ERSTELLUNG_JAHR","-r", "ERSTELLUNG_MONAT","-r", "REVISION_JAHR","-r", "REVISION_MONAT","-r", "GRUND_AENDERUNG", "-r", "HERKUNFT","-r", "HERKUNFT_JAHR","-r", "HERKUNFT_MONAT","-r", "OBJEKTART","-r", "ORIGINAL_HERKUNFT","-r", "GEBAEUDE_NUTZUNG", "-r", "Longitude", "-r", "Latitude", "-r", "Height", "2>&1", ">", "/var/app/log/agi_output.log"]
     detach: false
   when: lookup('file', processing_step_file)|int == 2
@@ -114,10 +122,12 @@
     mode: '0660'
     force: yes
   when: lookup('file', processing_step_file)|int == 2
+# =============================================
 
-# Third step =================================
+# =============================================
+# Third step
+# =============================================
 - name: Third step
   debug:
     msg: "Step 3"
   when: lookup('file', processing_step_file)|int == 3
-
