@@ -25,7 +25,7 @@
 
 - name: unzip files
   shell: |
-    for i in /home/ubuntu/data/subset_buildings/*.tar;
+    for i in /home/ubuntu/data/buildings/*.tar;
       do echo extracting ${i};tar -xzvf ${i} -C /home/ubuntu/data/input/;
     done
   when: lookup('file', processing_step_file)|int <= 1
