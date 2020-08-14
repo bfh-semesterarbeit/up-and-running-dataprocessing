@@ -157,3 +157,13 @@
     cmd: aws s3 cp --recursive /home/{{ my_user }}/data/output s3://3d-tiles/preview/ch.swisstopo.swisstlm3d.3d/current/
   when: lookup('file', processing_step_file)|int == 3
 
+- name: third step accomplished
+  vars:
+    processing_step: 4
+  template:
+    src: ../templates/processing_step.txt.tpl
+    dest: '{{ processing_step_file }}'
+    mode: '0660'
+    force: yes
+  when: lookup('file', processing_step_file)|int == 3
+
