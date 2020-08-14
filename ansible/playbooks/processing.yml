@@ -23,18 +23,11 @@
     mode: '0700'
   when: lookup('file', processing_step_file)|int <= 1
 
-#- name: unzip files
-#  shell: |
-#    for i in /home/ubuntu/data/subset_buildings/*.tar;
-#      do echo extracting ${i};tar -xzvf ${i} -C /home/ubuntu/data/input/;
-#    done
-#  when: lookup('file', processing_step_file)|int <= 1
-#
-
-- name: test if xml are wellformed
-  command:
-    cmd: python ../tests/test_xml_wellformed.py
-  register: not_wellformed
+- name: unzip files
+  shell: |
+    for i in /home/ubuntu/data/subset_buildings/*.tar;
+      do echo extracting ${i};tar -xzvf ${i} -C /home/ubuntu/data/input/;
+    done
   when: lookup('file', processing_step_file)|int <= 1
 
 # TODO better solution here: handling not_wellformed.stderr that it exist in any case
@@ -42,7 +35,13 @@
   command:
     cmd: echo ""
   register: not_wellformed
-  when: not_wellformed.skipped == true 
+  when: not_wellformed is not defined 
+
+- name: test if xml are wellformed
+  command:
+    cmd: python ../tests/test_xml_wellformed.py
+  register: not_wellformed
+  when: lookup('file', processing_step_file)|int <= 1
 
 - debug:
     var: not_wellformed
