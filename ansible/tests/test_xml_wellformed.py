@@ -1,7 +1,7 @@
 import os
 from lxml import etree
 import logging
-import threading§
+import threading
  
 BASEPATH = '/home/ubuntu/data/input/'
 LOGGING_FILE = '/home/ubuntu/data/log/bad_xml.log'
@@ -20,9 +20,9 @@ def try_xml(my_f):
         logger.info(my_f)
  
 # r=root, d=directories, f=files
-for r, d, f in os.walk(basepath):
+for r, d, f in os.walk(BASEPATH):
         for file in f:
             if '.kml' in file or '.dae' in file:
                 my_f = os.path.join(r, file)
-                x = threading.Thread(target=try_xml, args=(my_f,), daemon=True)
+                x = threading.Thread(target=try_xml, args=(my_f,))
                 x.start()
