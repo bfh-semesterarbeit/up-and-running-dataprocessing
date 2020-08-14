@@ -37,20 +37,13 @@
   register: not_wellformed
   when: lookup('file', processing_step_file)|int <= 1
 
-# TODO better solution here: handling not_wellformed.stderr that it exist in any case
-- name: dummy
-  command:
-    cmd: echo ""
-  register: not_wellformed
-  when: not_wellformed is not defined 
-
 - debug:
     var: not_wellformed
 
 - name: end play when xml not valid
   fail: 
     msg: there is a xml, that is not wellformed
-  when: not_wellformed.stderr != "" and lookup('file', processing_step_file)|int <= 1
+  when: not_wellformed is not defined and lookup('file', processing_step_file)|int <= 1
 
 - name: first step accomplished
   vars:
