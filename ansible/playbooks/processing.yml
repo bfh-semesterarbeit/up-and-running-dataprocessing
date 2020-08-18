@@ -154,7 +154,7 @@
 
 - name: copy to s3
   command:
-    cmd: aws s3 cp --recursive /home/{{ my_user }}/data/output s3://3d-tiles/preview/ch.swisstopo.swisstlm3d.3d/current/
+    cmd: aws s3 cp --recursive --content-encoding gzip /home/{{ my_user }}/data/output s3://3d-tiles/preview/ch.swisstopo.swisstlm3d.3d/current/
   when: lookup('file', processing_step_file)|int == 3
 
 - name: third step accomplished
