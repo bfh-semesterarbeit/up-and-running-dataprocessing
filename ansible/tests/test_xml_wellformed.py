@@ -25,4 +25,5 @@ for r, d, f in os.walk(BASEPATH):
             if '.kml' in file or '.dae' in file:
                 my_f = os.path.join(r, file)
                 x = threading.Thread(target=try_xml, args=(my_f,))
+                x.daemon = True
                 x.start()
