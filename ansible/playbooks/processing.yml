@@ -13,7 +13,7 @@
 # =============================================
 - name: first step
   debug:
-    msg: "Step 1"
+    msg: "Step 1: Uncompressing and validating data"
   when: lookup('file', processing_step_file)|int <= 1
 
 - name: create input folder
@@ -23,12 +23,12 @@
     mode: '0700'
   when: lookup('file', processing_step_file)|int <= 1
 
-#- name: unzip files
-#  shell: |
-#    for i in /home/ubuntu/data/subset_buildings/*.tar;
-#      do echo extracting ${i};tar -xzvf ${i} -C /home/ubuntu/data/input/;
-#    done
-#  when: lookup('file', processing_step_file)|int <= 1
+- name: unzip files
+  shell: |
+    for i in /home/ubuntu/data/buildings/*.tar;
+      do echo extracting ${i};tar -xzvf ${i} -C /home/ubuntu/data/input/;
+    done
+  when: lookup('file', processing_step_file)|int <= 1
 
 - name: test if xml are wellformed
   command:
@@ -63,7 +63,7 @@
 # =============================================
 - name: Second step
   debug:
-    msg: "Step 2"
+    msg: "Step 2: Processing raw data to web format (Cesium tiles)"
   when: lookup('file', processing_step_file)|int == 2
 
 - name: create output folder
@@ -103,9 +103,6 @@
     aws ecr get-login-password
   register: my_pw
   when: lookup('file', processing_step_file)|int == 2
-
-#- debug:
-#    var: my_pw.stdout
 
 - name: Log into private registry and force re-authorization
   docker_login:
@@ -149,7 +146,7 @@
 # =============================================
 - name: Third step
   debug:
-    msg: "Step 3"
+    msg: "Step 3: Publishing data on S3"
   when: lookup('file', processing_step_file)|int == 3
 
 - name: copy to s3
@@ -166,4 +163,5 @@
     mode: '0660'
     force: yes
   when: lookup('file', processing_step_file)|int == 3
+# =============================================
 
