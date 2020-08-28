@@ -3,7 +3,7 @@ from lxml import etree
 import logging
 import threading
  
-BASEPATH = '/home/ubuntu/data/input/'
+BASEPATH = '/home/ubuntu/processing/input/'
 LOGGING_FILE = '/home/ubuntu/data/log/bad_xml.log'
 
 logger = logging.getLogger('not_good')

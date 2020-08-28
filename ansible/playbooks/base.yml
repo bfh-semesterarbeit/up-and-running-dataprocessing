@@ -11,5 +11,8 @@
     - name: setup to access s3
       include_tasks: s3.yml
 
+    - name: format and mount ssd
+      include_tasks: ssd.yml
+
     - name: processing
       include_tasks: processing.yml

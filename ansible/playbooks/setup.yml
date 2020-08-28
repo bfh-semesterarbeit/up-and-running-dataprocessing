@@ -17,6 +17,8 @@
     pkg:
     - docker.io
     - python-pip
+    - libxml2-dev
+    - libxslt-dev
     state: latest
  
 - name: install docker module for python
@@ -24,7 +26,7 @@
   pip:
     name:
     - docker
-    - lxml
+    - lxml==4.5
 
 - name: set usermod to {{ my_user }}
   become: yes

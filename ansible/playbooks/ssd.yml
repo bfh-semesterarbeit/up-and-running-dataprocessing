@@ -1,0 +1,18 @@
+---
+- name: Create a ext3 filesystem on /dev/nvme1n1
+  filesystem:
+    fstype: ext3
+    dev: /dev/nvme1n1
+
+- name: create input folder
+  file: 
+    path: /home/{{ my_user }}/processing
+    state: directory
+    mode: '0700'
+
+- name: mount ssd
+  mount:
+   path: /home{{ my_user }}/processing
+   src: /dev/nvme1n1
+   fstype: ext3
+   state: present
