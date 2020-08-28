@@ -11,7 +11,7 @@
     name: awscli
     state: latest
 
-- name: apt-install docker
+- name: apt-install docker and helpers
   become: yes
   apt:
     pkg:
@@ -19,6 +19,7 @@
     - python-pip
     - libxml2-dev
     - libxslt-dev
+    - jq
     state: latest
  
 - name: install docker module for python
