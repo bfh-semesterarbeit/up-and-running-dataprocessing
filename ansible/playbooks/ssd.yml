@@ -1,23 +1,32 @@
 ---
 # TODO: quite a hack, and only working with 200GB
+- name: get instance id
+  shell: curl http://169.254.169.254/latest/meta-data/instance-id
+  warn: no
+  register: my_instance_id
+
+- name: attach volume on instance
+  command:
+  cmd: aws ec2 attach-volume --volume-id vol-066d5c65470dbbec1 --instance-id {{ my_instance_id.stdout }} --device /dev/sdf
+
 - name: which is the filesystem with 200GB
   shell: lsblk --sort size --json | jq -r '.blockdevices[1:][] | select(.size == "200G").name'
   register: blk_to_format
 
-- name: create a ext3 filesystem on {{ blk_to_format.stdout }}
-  filesystem:
-    fstype: ext3
-    dev: /dev/{{ blk_to_format.stdout }}
+#- name: create a ext3 filesystem on {{ blk_to_format.stdout }}
+#filesystem:
+#  fstype: ext4
+#  dev: /dev/{{ blk_to_format.stdout }}
 
 - name: create input folder
   file: 
     path: /home/{{ my_user }}/processing
     state: directory
-    mode: '0700'
+    mode: '0770'
 
-- name: mount ssd
+- name: mount ssd {{ blk_to_format.stdout }}
   mount:
-   path: /home{{ my_user }}/processing
+   path: /home/{{ my_user }}/processing
    src: /dev/{{ blk_to_format.stdout }}
-   fstype: ext3
-   state: present
+   fstype: ext4
+   state: mounted
