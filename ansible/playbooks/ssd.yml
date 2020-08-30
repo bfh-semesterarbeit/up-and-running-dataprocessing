@@ -8,7 +8,11 @@
 
 - name: attach volume on instance
   command:
-  cmd: aws ec2 attach-volume --volume-id vol-066d5c65470dbbec1 --instance-id {{ my_instance_id.stdout }} --device /dev/sdf
+    cmd: aws ec2 attach-volume --volume-id vol-066d5c65470dbbec1 --instance-id {{ my_instance_id.stdout }} --device /dev/sdf
+
+- name: wait on attaching volume
+  wait_for:
+    timeout: 10
 
 - name: which is the filesystem with 200GB
   shell: lsblk --sort size --json | jq -r '.blockdevices[1:][] | select(.size == "200G").name'
