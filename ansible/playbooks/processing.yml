@@ -159,4 +159,33 @@
     force: yes
   when: lookup('file', processing_step_file)|int == 3
 # =============================================
+#
+# =============================================
+# Fourth step
+# =============================================
+- name: Fourth step
+  debug:
+    msg: "Step 4: Cleanup"
+  when: lookup('file', processing_step_file)|int == 4
+
+- name: remove folders
+  file:
+    path: /home/{{ my_user }}/processing/{{ item }}
+    state: absent
+  with_items:
+  - db
+  - input
+  - output
+  when: lookup('file', processing_step_file)|int == 4
+
+- name: fourth step accomplished
+  vars:
+    processing_step: 5
+  template:
+    src: ../templates/processing_step.txt.tpl
+    dest: '{{ processing_step_file }}'
+    mode: '0660'
+    force: yes
+  when: lookup('file', processing_step_file)|int == 4
+# =============================================
 
