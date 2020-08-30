@@ -2,7 +2,8 @@
 # TODO: quite a hack, and only working with 200GB
 - name: get instance id
   shell: curl http://169.254.169.254/latest/meta-data/instance-id
-  warn: no
+  args:
+    warn: no
   register: my_instance_id
 
 - name: attach volume on instance
