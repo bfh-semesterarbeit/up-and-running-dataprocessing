@@ -25,10 +25,9 @@
     mode: '0700'
   when: lookup('file', processing_step_file)|int <= 1
 
-# TODO rm subset
 - name: unzip files
   shell: |
-    for i in /home/{{ my_user }}/data/subset_buildings/*.tar;
+    for i in /home/{{ my_user }}/data/buildings/*.tar;
       do echo extracting ${i};tar -xzvf ${i} -C /home/{{ my_user }}/processing/input/;
     done
   when: lookup('file', processing_step_file)|int <= 1
